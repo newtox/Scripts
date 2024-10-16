@@ -1,68 +1,80 @@
 #!/bin/bash
 
-LOG_FILE="/var/log/mog_update.log"
-echo "$(date) - Script execution started" >> "$LOG_FILE"
+LOG_FILE="/root/mog_update.log"
+echo_and_log() {
+    # Function to echo to console and log to file
+    echo "$1"
+    echo "$(date) - $1" >> "$LOG_FILE"
+}
+
+echo_and_log "Script execution started"
 
 if [ ! -f ".env" ]; then
-    echo "$(date) - Error: .env file not found." >> "$LOG_FILE"
+    echo_and_log "Error: .env file not found."
     exit 1
 fi
+
 source .env
 
 if [ -z "$GITHUB_USERNAME" ] || [ -z "$GITHUB_PAT" ]; then
-    echo "$(date) - Error: GITHUB_USERNAME or GITHUB_PAT not set in .env." >> "$LOG_FILE"
+    echo_and_log "Error: GITHUB_USERNAME or GITHUB_PAT not set in .env."
     exit 1
 fi
 
 # Check if tmux session exists
 if ! tmux has-session -t mog 2>/dev/null; then
-    echo "$(date) - Tmux session 'mog' does not exist. Creating..." >> "$LOG_FILE"
+    echo_and_log "Tmux session 'mog' does not exist. Creating..."
     tmux new-session -s mog -d
     tmux send-keys -t mog "cd /root/Mog" C-m
-    sleep 5
+    sleep 2  # Adjusted to a shorter sleep
 else
-    echo "$(date) - Tmux session 'mog' already exists. Using existing session." >> "$LOG_FILE"
+    echo_and_log "Tmux session 'mog' already exists. Using existing session."
     tmux send-keys -t mog C-l  # Clear the screen to start fresh
 fi
 
-# Git pull
-tmux send-keys -t mog "git pull" C-m
-sleep 10
+# Git pull and log output
+GIT_OUTPUT=$(tmux send-keys -t mog "git pull" C-m 2>&1)
+echo_and_log "Git pull output: $GIT_OUTPUT"
+
+# Check if git pull was successful
+if [[ $? -ne 0 ]]; then
+    echo_and_log "Error: Git pull failed."
+    exit 1
+fi
 
 tmux send-keys -t mog "$GITHUB_USERNAME" C-m
-sleep 5
-
 tmux send-keys -t mog "$GITHUB_PAT" C-m
-sleep 5
 
 # Wait for pull
-sleep 20
-
-# Check git status
-tmux send-keys -t mog "git status" C-m
 sleep 5
 
-# Start Dart
-tmux send-keys -t mog "dart run bin/main.dart" C-m
-echo "$(date) - Attempted to start Dart application." >> "$LOG_FILE"
+# Check git status and log output
+STATUS_OUTPUT=$(tmux send-keys -t mog "git status" C-m 2>&1)
+echo_and_log "Git status output: $STATUS_OUTPUT"
+
+# Start Dart and log output
+DART_OUTPUT=$(tmux send-keys -t mog "dart run bin/main.dart" C-m 2>&1)
+echo_and_log "Dart start output: $DART_OUTPUT"
 
 # Wait for Dart to start
-sleep 30
+sleep 5
 
 # Check if Dart is running
 if ! pgrep -f "dart run bin/main.dart" > /dev/null; then
-    echo "$(date) - Warning: Dart process not found. Attempting restart..." >> "$LOG_FILE"
-    tmux send-keys -t mog "dart run bin/main.dart" C-m
-    sleep 20
+    echo_and_log "Warning: Dart process not found. Attempting restart..."
+    DART_RESTART_OUTPUT=$(tmux send-keys -t mog "dart run bin/main.dart" C-m 2>&1)
+    echo_and_log "Dart restart output: $DART_RESTART_OUTPUT"
+    
+    sleep 5
 
     if ! pgrep -f "dart run bin/main.dart" > /dev/null; then
-        echo "$(date) - Restart failed. Dart process still not running." >> "$LOG_FILE"
+        echo_and_log "Restart failed. Dart process still not running."
     else
-        echo "$(date) - Restart successful, Dart process now running." >> "$LOG_FILE"
+        echo_and_log "Restart successful, Dart process now running."
     fi
 else
-    echo "$(date) - Dart process found running." >> "$LOG_FILE"
+    echo_and_log "Dart process found running."
 fi
 
 # Final check or cleanup
-sleep 10
+echo_and_log "Script execution completed."
