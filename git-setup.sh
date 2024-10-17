@@ -82,9 +82,11 @@ sleep 1
 # Set HTTPS URL for repository
 REPO_URL="https://github.com/$USERNAME/$repo_name.git"
 
-# Select .gitignore type
-echo "Select primary file type for .gitignore:"
-select lang in "None" "Python" "JavaScript" "Java" "C++" "Ruby" "Go" "Other"; do
+#!/bin/bash
+
+# Select primary file type for .gitignore
+echo "Select primary file type for .gitignore (enter the number):"
+select lang in "None" "Python" "JavaScript" "Java" "C++" "Ruby" "Go" "Laravel" "Django" "React" "Angular" "Flask" "Express" "Other"; do
     case $lang in
         None)
             echo "# Basic .gitignore" > .gitignore
@@ -92,21 +94,203 @@ select lang in "None" "Python" "JavaScript" "Java" "C++" "Ruby" "Go" "Other"; do
             echo "!*.md" >> .gitignore
             echo "!.gitignore" >> .gitignore
             echo "!src/" >> .gitignore
-            echo "Created basic .gitignore file."
+            echo "Created a basic .gitignore file."
+            break
+            ;;
+        Python)
+            echo "# .gitignore for Python" > .gitignore
+            echo "__pycache__/" >> .gitignore
+            echo "*.py[cod]" >> .gitignore
+            echo "*.pyo" >> .gitignore
+            echo "*.pyd" >> .gitignore
+            echo "*.db" >> .gitignore
+            echo "*.egg-info/" >> .gitignore
+            echo "dist/" >> .gitignore
+            echo "build/" >> .gitignore
+            echo ".env" >> .gitignore
+            echo "Created a Python-specific .gitignore."
+            break
+            ;;
+        JavaScript)
+            echo "# .gitignore for JavaScript" > .gitignore
+            echo "node_modules/" >> .gitignore
+            echo "npm-debug.log" >> .gitignore
+            echo "yarn-error.log" >> .gitignore
+            echo "dist/" >> .gitignore
+            echo "build/" >> .gitignore
+            echo ".DS_Store" >> .gitignore
+            echo ".env" >> .gitignore
+            echo "Created a JavaScript-specific .gitignore."
+            break
+            ;;
+        Java)
+            echo "# .gitignore for Java" > .gitignore
+            echo "*.class" >> .gitignore
+            echo "*.jar" >> .gitignore
+            echo "*.war" >> .gitignore
+            echo "*.ear" >> .gitignore
+            echo "*.log" >> .gitignore
+            echo "*.swp" >> .gitignore
+            echo "*.swo" >> .gitignore
+            echo "target/" >> .gitignore
+            echo "bin/" >> .gitignore
+            echo "build/" >> .gitignore
+            echo ".idea/" >> .gitignore
+            echo "*.iml" >> .gitignore
+            echo "*.hprof" >> .gitignore
+            echo "Created a Java-specific .gitignore."
+            break
+            ;;
+        C++)
+            echo "# .gitignore for C++" > .gitignore
+            echo "*.o" >> .gitignore
+            echo "*.obj" >> .gitignore
+            echo "*.exe" >> .gitignore
+            echo "*.out" >> .gitignore
+            echo "*.class" >> .gitignore
+            echo "*.so" >> .gitignore
+            echo "*.dSYM/" >> .gitignore
+            echo "*.swp" >> .gitignore
+            echo "*.swo" >> .gitignore
+            echo "*.log" >> .gitignore
+            echo "*.vscode/" >> .gitignore
+            echo "Created a C++-specific .gitignore."
+            break
+            ;;
+        Ruby)
+            echo "# .gitignore for Ruby" > .gitignore
+            echo "*.gem" >> .gitignore
+            echo "*.rbc" >> .gitignore
+            echo "/.bundle" >> .gitignore
+            echo "/vendor/" >> .gitignore
+            echo "log/*" >> .gitignore
+            echo "tmp/*" >> .gitignore
+            echo "coverage/" >> .gitignore
+            echo "*.log" >> .gitignore
+            echo "*.swp" >> .gitignore
+            echo "Created a Ruby-specific .gitignore."
+            break
+            ;;
+        Go)
+            echo "# .gitignore for Go" > .gitignore
+            echo "*.exe" >> .gitignore
+            echo "*.test" >> .gitignore
+            echo "*.out" >> .gitignore
+            echo "bin/" >> .gitignore
+            echo "vendor/" >> .gitignore
+            echo "*.swp" >> .gitignore
+            echo "Created a Go-specific .gitignore."
+            break
+            ;;
+        Laravel)
+            echo "# .gitignore for Laravel" > .gitignore
+            echo "/public/storage" >> .gitignore
+            echo "/storage/*.key" >> .gitignore
+            echo "/vendor" >> .gitignore
+            echo "/node_modules" >> .gitignore
+            echo "/.vscode" >> .gitignore
+            echo "/.env" >> .gitignore
+            echo "Homestead.yaml" >> .gitignore
+            echo "Homestead.json" >> .gitignore
+            echo "npm-debug.log" >> .gitignore
+            echo "yarn-error.log" >> .gitignore
+            echo "package-lock.json" >> .gitignore
+            echo "yarn.lock" >> .gitignore
+            echo "# IDE and OS files" >> .gitignore
+            echo ".DS_Store" >> .gitignore
+            echo "Thumbs.db" >> .gitignore
+            echo ".idea" >> .gitignore
+            echo "*.sublime-project" >> .gitignore
+            echo "*.sublime-workspace" >> .gitignore
+            echo ".vagrant" >> .gitignore
+            echo "/.phpunit.result.cache" >> .gitignore
+            echo "/.phpunit.result.cache.json" >> .gitignore
+            echo "# Logs" >> .gitignore
+            echo "*.log" >> .gitignore
+            echo "/storage/logs/*" >> .gitignore
+            echo "/storage/framework/sessions/*" >> .gitignore
+            echo "/storage/framework/views/*" >> .gitignore
+            echo "/storage/app/public/*" >> .gitignore
+            echo "/storage/debugbar/*" >> .gitignore
+            echo "# Temporary files" >> .gitignore
+            echo "*.tmp" >> .gitignore
+            echo "*.temp" >> .gitignore
+            echo "*.bak" >> .gitignore
+            echo "*.swp" >> .gitignore
+            echo "*.swo" >> .gitignore
+            echo "Created a Laravel-specific .gitignore."
+            break
+            ;;
+        Django)
+            echo "# .gitignore for Django" > .gitignore
+            echo "*.pyc" >> .gitignore
+            echo "*.pyo" >> .gitignore
+            echo "__pycache__/" >> .gitignore
+            echo "db.sqlite3" >> .gitignore
+            echo "media/" >> .gitignore
+            echo "staticfiles/" >> .gitignore
+            echo ".env" >> .gitignore
+            echo "*.log" >> .gitignore
+            echo "*.pot" >> .gitignore
+            echo "*.py[cod]" >> .gitignore
+            echo "Created a Django-specific .gitignore."
+            break
+            ;;
+        React)
+            echo "# .gitignore for React" > .gitignore
+            echo "node_modules/" >> .gitignore
+            echo "build/" >> .gitignore
+            echo ".DS_Store" >> .gitignore
+            echo "npm-debug.log" >> .gitignore
+            echo "yarn-error.log" >> .gitignore
+            echo ".env" >> .gitignore
+            echo "Created a React-specific .gitignore."
+            break
+            ;;
+        Angular)
+            echo "# .gitignore for Angular" > .gitignore
+            echo "node_modules/" >> .gitignore
+            echo "dist/" >> .gitignore
+            echo ".tmp/" >> .gitignore
+            echo "*.log" >> .gitignore
+            echo ".DS_Store" >> .gitignore
+            echo "npm-debug.log" >> .gitignore
+            echo "yarn-error.log" >> .gitignore
+            echo ".env" >> .gitignore
+            echo "Created an Angular-specific .gitignore."
+            break
+            ;;
+        Flask)
+            echo "# .gitignore for Flask" > .gitignore
+            echo "__pycache__/" >> .gitignore
+            echo "*.pyc" >> .gitignore
+            echo "*.pyo" >> .gitignore
+            echo "*.db" >> .gitignore
+            echo "*.env" >> .gitignore
+            echo "instance/" >> .gitignore
+            echo "*.log" >> .gitignore
+            echo "Created a Flask-specific .gitignore."
+            break
+            ;;
+        Express)
+            echo "# .gitignore for Express" > .gitignore
+            echo "node_modules/" >> .gitignore
+            echo "npm-debug.log" >> .gitignore
+            echo ".env" >> .gitignore
+            echo ".DS_Store" >> .gitignore
+            echo "logs/" >> .gitignore
+            echo "Created an Express-specific .gitignore."
             break
             ;;
         Other)
             read -p "Enter specific language or environment: " custom_lang
-            lang=$custom_lang
             echo "# Custom .gitignore for $custom_lang" > .gitignore
-            echo "Fallback: basic ignore for custom type."
+            echo "Fallback: basic ignore for custom type." >> .gitignore
+            echo "Created a custom .gitignore for $custom_lang."
             break
             ;;
-        *) 
-            echo "# .gitignore for $lang" > .gitignore
-            # Here you would typically fetch or create language-specific .gitignore content
-            echo "Created $lang specific .gitignore."
-            break
+        *)
+            echo "Invalid selection. Please try again."
             ;;
     esac
 done
